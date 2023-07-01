@@ -8,12 +8,30 @@ from fastapi.encoders import jsonable_encoder
 from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse
 
+# CORS
+from fastapi.middleware.cors import CORSMiddleware
+
 ### Project files import
 import Database as d
 from Constants import *
 
 # Initialization
 app = FastAPI(docs_url="/docs", redoc_url=None)
+
+# CORS
+origins = [
+        "http://localhost",
+        "http://localhost:8080",
+        "http://localhost:*"
+        ]
+
+app.add_middleware(
+        CORSMiddleware, 
+        allow_origins = origins,
+        allow_credentials= True,
+        allow_methods= ["*"],
+        allow_headers= ["*"],
+        )
 
 @app.exception_handler(RequestValidationError)
 async def validation_exception_handler(request: Request, exc: RequestValidationError):
